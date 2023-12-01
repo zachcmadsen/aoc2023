@@ -79,7 +79,7 @@ void part2()
         line_value += 10 * num_lut[first_match_str];
 
         std::match_results<std::string::const_reverse_iterator> last_match;
-        auto rnum_it = std::regex_search(line.crbegin(), line.crend(), last_match, rnum_regex);
+        std::regex_search(line.crbegin(), line.crend(), last_match, rnum_regex);
         std::string last_match_str = last_match.str();
         line_value += num_lut[last_match_str];
 
