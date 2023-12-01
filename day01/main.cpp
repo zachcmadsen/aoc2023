@@ -11,18 +11,16 @@ int main() {
     while (std::getline(file, line)) {
         int line_value = 0;
 
-        for (int i = 0; i < line.size(); ++i) {
-            auto c = line[i];
-            if (std::isdigit(static_cast<unsigned char>(c))) {
-                line_value += 10 * (c - '0');
+        for (auto it = line.begin(); it != line.end(); ++it) {
+            if (std::isdigit(static_cast<unsigned char>(*it))) {
+                line_value += 10 * (*it - '0');
                 break;
             }
         }
 
-        for (int i = line.size() - 1; i >= 0; --i) {
-            auto c = line[i];
-            if (std::isdigit(static_cast<unsigned char>(c))) {
-                line_value += c - '0';
+        for (auto it = line.rbegin(); it != line.rend(); ++it) {
+            if (std::isdigit(static_cast<unsigned char>(*it))) {
+                line_value += *it - '0';
                 break;
             }
         }
