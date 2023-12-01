@@ -1,6 +1,6 @@
-#include <cctype>
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <ranges>
 #include <regex>
 #include <string>
 #include <unordered_map>
@@ -15,23 +15,14 @@ void part1()
     {
         int line_value = 0;
 
-        for (auto it = line.begin(); it != line.end(); ++it)
-        {
-            if (std::isdigit(static_cast<unsigned char>(*it)))
-            {
-                line_value += 10 * (*it - '0');
-                break;
-            }
-        }
+        auto is_digit = [](char c)
+        { return std::isdigit(static_cast<unsigned char>(c)); };
 
-        for (auto it = line.rbegin(); it != line.rend(); ++it)
-        {
-            if (std::isdigit(static_cast<unsigned char>(*it)))
-            {
-                line_value += *it - '0';
-                break;
-            }
-        }
+        char first_digit = *std::ranges::find_if(line, is_digit);
+        line_value += 10 * (first_digit - '0');
+
+        char last_digit = *std::ranges::find_if(line | std::views::reverse, is_digit);
+        line_value += (last_digit - '0');
 
         sum += line_value;
     }
