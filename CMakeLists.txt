@@ -9,3 +9,4 @@ add_compile_options(-Wall -Wextra -Werror)
 
 add_subdirectory(day01)
 add_subdirectory(day02)
+add_subdirectory(day03)
