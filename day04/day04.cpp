@@ -33,22 +33,23 @@ int main()
         std::string_view winning_numbers_str = line.substr(0, pipe_pos - 1);
         std::string_view numbers_str = line.substr(pipe_pos + 1);
 
-        for (std::string_view winning_number_str : winning_numbers_str | split_str(' '))
+        for (std::string_view winning_number_sv : winning_numbers_str | split_str(' '))
         {
-            int winning_number = std::stoi(winning_number_str.data());
+            int winning_number;
+            std::from_chars(winning_number_sv.data(), winning_number_sv.data() + winning_number_sv.size(), winning_number);
             winning_numbers_set.insert(winning_number);
         }
 
         int matches = 0;
-        for (std::string_view number_str : numbers_str | split_str(' '))
+        for (std::string_view number_sv : numbers_str | split_str(' '))
         {
-            if (number_str.empty())
+            if (number_sv.empty())
             {
                 continue;
             }
 
             int number;
-            std::from_chars(number_str.begin(), number_str.end(), number);
+            std::from_chars(number_sv.data(), number_sv.data() + number_sv.size(), number);
             if (winning_numbers_set.contains(number))
             {
                 ++matches;
