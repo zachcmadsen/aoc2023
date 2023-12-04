@@ -1,6 +1,8 @@
 #include <charconv>
+#include <cmath>
 #include <fstream>
 #include <iostream>
+#include <numeric>
 #include <ranges>
 #include <regex>
 #include <unordered_set>
@@ -18,8 +20,8 @@ int main()
     std::ifstream input_file{"input"};
     std::string input = {std::istreambuf_iterator{input_file}, {}};
 
-    int card_value_total = 0;
     std::unordered_set<int> winning_numbers_set;
+    std::vector<int> card_matches;
 
     for (std::string_view line : input | split_str('\n'))
     {
@@ -37,7 +39,7 @@ int main()
             winning_numbers_set.insert(winning_number);
         }
 
-        int card_value = 0;
+        int matches = 0;
         for (std::string_view number_str : numbers_str | split_str(' '))
         {
             if (number_str.empty())
@@ -49,13 +51,35 @@ int main()
             std::from_chars(number_str.begin(), number_str.end(), number);
             if (winning_numbers_set.contains(number))
             {
-                card_value = card_value == 0 ? 1 : card_value * 2;
+                ++matches;
             }
         }
 
-        card_value_total += card_value;
+        card_matches.push_back(matches);
         winning_numbers_set.clear();
     }
 
-    std::cout << "part 1: " << card_value_total << '\n';
+    // Part 1
+    int total_points = 0;
+    for (int matches : card_matches)
+    {
+        total_points += 1 << (matches - 1);
+    }
+
+    // Part 2
+    std::vector<int> card_copies(card_matches.size(), 0);
+    for (std::size_t i = 0; i < card_matches.size(); ++i)
+    {
+        int matches = card_matches[i];
+        int copies = card_copies[i];
+        for (std::size_t j = i + 1; j < (matches + i + 1); ++j)
+        {
+            card_copies[j] += 1 + copies;
+        }
+    }
+    int total_copies = std::accumulate(card_copies.begin(), card_copies.end(), 0);
+    int total_cards = card_matches.size() + total_copies;
+
+    std::cout << "part 1: " << total_points << '\n';
+    std::cout << "part 2: " << total_cards << '\n';
 }
